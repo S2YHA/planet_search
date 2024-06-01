@@ -1,9 +1,7 @@
 <template>
-  <input v-model="value" />
+  <input v-model="model" />
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
-const value = ref('')
+const model = defineModel()
 </script>

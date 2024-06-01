@@ -1,6 +1,6 @@
 <template>
   <div class="bg-grey bg-opacity-20">
-    <Input />
+    <Input v-model="searchText" />
     <table>
       <thead>
         <tr>
@@ -22,11 +22,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import Input from '../atoms/Input.vue'
 import Pagination from '../molecules/Pagination.vue'
 
-const emit = defineEmits(['changePage'])
+const emit = defineEmits(['search', 'changePage'])
 
 defineProps({
   headers: {
@@ -37,12 +37,23 @@ defineProps({
     type: Array,
     required: true
   },
+  searchText: {
+    type: String,
+    required: false,
+    default: ''
+  },
   pages: {
     type: Number,
     required: false,
     default: 1
   }
 })
+
+const searchText = ref('')
+watch(searchText, () => search())
+function search() {
+  emit('search', searchText)
+}
 
 const currentPage = ref(1)
 function changePage(newPage) {

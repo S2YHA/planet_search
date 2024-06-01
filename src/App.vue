@@ -5,6 +5,7 @@
     :headers="headers"
     :data="planetsData"
     :pages="pages"
+    @search="search"
     @changePage="getPlanets"
   />
 </template>
@@ -54,6 +55,23 @@ function prepareData(data) {
       Url: planet.url
     }
   })
+}
+
+function search(searchText) {
+  fetch('https://swapi.dev/api/planets/?search=' + searchText.value)
+    .then(function (response) {
+      if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' + response.status)
+        return
+      }
+      response.json().then(function (data) {
+        pages.value = countPages(data)
+        planetsData.value = prepareData(data.results)
+      })
+    })
+    .catch(function (err) {
+      console.log('Fetch Error', err)
+    })
 }
 </script>
 
