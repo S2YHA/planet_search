@@ -3,9 +3,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
-const label = ref('Click me')
+defineProps({
+  label: {
+    type: String,
+    required: true,
+    default: 'Click'
+  }
+})
 
 function handleClick() {
   console.log('Button clicked')

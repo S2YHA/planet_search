@@ -1,8 +1,12 @@
-<script setup></script>
+<script setup>
+import Button from './components/atoms/Button.vue'
+import Input from './components/atoms/Input.vue'
+</script>
 
 <template>
   <header></header>
-  <div class="underline">asdasdasdads</div>
+  <Button />
+  <Input />
   <main></main>
 </template>
 
