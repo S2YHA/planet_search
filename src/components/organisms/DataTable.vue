@@ -17,13 +17,16 @@
         </tr>
       </tbody>
     </table>
-    <Pagination :currentPage="1" :totalPages="pages" />
+    <Pagination :currentPage="currentPage" :totalPages="pages" @changePage="changePage" />
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import Input from '../atoms/Input.vue'
 import Pagination from '../molecules/Pagination.vue'
+
+const emit = defineEmits(['changePage'])
 
 defineProps({
   headers: {
@@ -40,4 +43,10 @@ defineProps({
     default: 1
   }
 })
+
+const currentPage = ref(1)
+function changePage(newPage) {
+  currentPage.value = newPage
+  emit('changePage', newPage)
+}
 </script>

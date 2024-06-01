@@ -3,15 +3,17 @@
 </template>
 
 <script setup>
+const emit = defineEmits(['click'])
+
 defineProps({
   label: {
     type: String,
     required: true,
-    default: 'Click'
+    default: 'Text'
   }
 })
 
 function handleClick() {
-  console.log('Button clicked')
+  emit('click')
 }
 </script>

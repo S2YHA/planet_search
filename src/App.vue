@@ -5,6 +5,7 @@
     :headers="headers"
     :data="planetsData"
     :pages="pages"
+    @changePage="getPlanets"
   />
 </template>
 
@@ -13,11 +14,11 @@ import { ref, onMounted } from 'vue'
 import DataTable from './components/organisms/DataTable.vue'
 
 const planetsData = ref([])
-const pages = ref(null)
+const pages = ref(1)
 const headers = ['Name', 'Population', 'Rotation Period', 'Climate', 'Gravity', 'Created', 'Url']
 
-onMounted(() => {
-  fetch('https://swapi.dev/api/planets')
+function getPlanets(page = 1) {
+  fetch('https://swapi.dev/api/planets/?page=' + page)
     .then(function (response) {
       if (response.status !== 200) {
         console.log('Looks like there was a problem. Status Code: ' + response.status)
@@ -31,6 +32,10 @@ onMounted(() => {
     .catch(function (err) {
       console.log('Fetch Error', err)
     })
+}
+
+onMounted(() => {
+  getPlanets()
 })
 
 function countPages(data) {
