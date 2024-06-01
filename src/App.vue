@@ -1,12 +1,19 @@
 <template>
-  <DataTable :headers="headers" :data="planetsData" />
+  <DataTable
+    v-if="planetsData.length"
+    class="justify-center"
+    :headers="headers"
+    :data="planetsData"
+    :pages="pages"
+  />
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import DataTable from './components/molecules/DataTable.vue'
+import DataTable from './components/organisms/DataTable.vue'
 
 const planetsData = ref([])
+const pages = ref(null)
 const headers = ['Name', 'Population', 'Rotation Period', 'Climate', 'Gravity', 'Created', 'Url']
 
 onMounted(() => {
@@ -17,23 +24,39 @@ onMounted(() => {
         return
       }
       response.json().then(function (data) {
-        planetsData.value = data.results.map((planet) => {
-          return {
-            name: planet.name,
-            population: planet.population,
-            rotationPeriod: planet.rotation_period,
-            climate: planet.climate,
-            gravity: planet.gravity,
-            created: planet.created,
-            url: planet.url
-          }
-        })
+        pages.value = countPages(data)
+        planetsData.value = prepareData(data.results)
       })
     })
     .catch(function (err) {
       console.log('Fetch Error', err)
     })
 })
+
+function countPages(data) {
+  return Math.ceil(data.count / data.results.length)
+}
+
+function prepareData(data) {
+  return data.map((planet) => {
+    return {
+      Name: planet.name,
+      Population: planet.population,
+      'Rotation Period': planet.rotation_period,
+      Climate: planet.climate,
+      Gravity: planet.gravity,
+      Created: planet.created,
+      Url: planet.url
+    }
+  })
+}
 </script>
 
-<style scoped></style>
+<style>
+body {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url('./assets/death_star_star_wars_2-wallpaper-2560x1600.jpg');
+}
+</style>
