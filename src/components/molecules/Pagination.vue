@@ -1,8 +1,9 @@
 <template>
   <div class="flex gap-4">
-    <Button label="Previous" :disabled="currentPage === 1" @click="changePage(currentPage - 1)" />
+    <Button label="Prev" :disabled="currentPage === 1" @click="changePage(currentPage - 1)" />
     <Button
       v-for="pageNumber in totalPages"
+      :class="currentPage == pageNumber ? 'opacity-50' : ''"
       :label="pageNumber.toString()"
       @click="changePage(pageNumber)"
     />

@@ -1,5 +1,5 @@
 <template>
-  <button @click="handleClick">{{ label }}</button>
+  <button class="p-1.5 rounded-md bg-amber-400 text-black" @click="handleClick">{{ label }}</button>
 </template>
 
 <script setup>

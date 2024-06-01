@@ -5,9 +5,12 @@
     :headers="headers"
     :data="planetsData"
     :pages="pages"
-    @search="search"
-    @changePage="getPlanets"
-  />
+    @update="getPlanets"
+  >
+    <template #cell(Url)="{ value, item }">
+      <a :href="value" target="_blank">link</a>
+    </template>
+  </DataTable>
 </template>
 
 <script setup>
@@ -18,8 +21,9 @@ const planetsData = ref([])
 const pages = ref(1)
 const headers = ['Name', 'Population', 'Rotation Period', 'Climate', 'Gravity', 'Created', 'Url']
 
-function getPlanets(page = 1) {
-  fetch('https://swapi.dev/api/planets/?page=' + page)
+function getPlanets({ searchText = '', currentPage = 1 } = {}) {
+  const query = buildQuery(searchText.value, currentPage.value)
+  fetch('https://swapi.dev/api/planets' + query)
     .then(function (response) {
       if (response.status !== 200) {
         console.log('Looks like there was a problem. Status Code: ' + response.status)
@@ -33,45 +37,40 @@ function getPlanets(page = 1) {
     .catch(function (err) {
       console.log('Fetch Error', err)
     })
+}
+
+function buildQuery(searchText, currentPage) {
+  const search = searchText ? searchText : ''
+  const page = currentPage ? currentPage : 1
+
+  return `?search=${search}&page=${page}`
 }
 
 onMounted(() => {
   getPlanets()
 })
 
+const rowsPerPage = 10
 function countPages(data) {
-  return Math.ceil(data.count / data.results.length)
+  return Math.ceil(data.count / rowsPerPage)
 }
 
 function prepareData(data) {
   return data.map((planet) => {
     return {
       Name: planet.name,
-      Population: planet.population,
-      'Rotation Period': planet.rotation_period,
-      Climate: planet.climate,
-      Gravity: planet.gravity,
-      Created: planet.created,
+      Population: planet.population === 'unknown' ? '-' : planet.population,
+      'Rotation Period': planet.rotation_period === 'unknown' ? '-' : planet.rotation_period,
+      Climate: planet.climate === 'unknown' ? '-' : planet.climate,
+      Gravity: planet.gravity === 'unknown' ? '-' : planet.gravity,
+      Created: prepareDate(planet.created),
       Url: planet.url
     }
   })
 }
 
-function search(searchText) {
-  fetch('https://swapi.dev/api/planets/?search=' + searchText.value)
-    .then(function (response) {
-      if (response.status !== 200) {
-        console.log('Looks like there was a problem. Status Code: ' + response.status)
-        return
-      }
-      response.json().then(function (data) {
-        pages.value = countPages(data)
-        planetsData.value = prepareData(data.results)
-      })
-    })
-    .catch(function (err) {
-      console.log('Fetch Error', err)
-    })
+function prepareDate(date) {
+  return new Date(date).toLocaleString('en-GB')
 }
 </script>
 
