@@ -1,13 +1,15 @@
 <template>
   <div class="flex gap-4">
-    <Button label="Prev" :disabled="currentPage === 1" @click="changePage(currentPage - 1)" />
+    <Button id="prev-button" label="Prev" :disabled="currentPage === 1" @click="changePage(currentPage - 1)" />
     <Button
       v-for="pageNumber in totalPages"
+      :id="`page-${pageNumber}`"
       :class="[currentPage == pageNumber ? 'opacity-50' : '', 'hidden sm:block']"
       :label="pageNumber.toString()"
       @click="changePage(pageNumber)"
     />
     <Button
+    id="next-button"
       label="Next"
       :disabled="currentPage === totalPages"
       @click="changePage(currentPage + 1)"

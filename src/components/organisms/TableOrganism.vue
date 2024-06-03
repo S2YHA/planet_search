@@ -62,10 +62,11 @@ const currentPage = ref(1)
 const searchText = ref('')
 
 function emitUpdate() {
-  emit('update', {
-    searchText: searchText,
-    currentPage: currentPage
-  })
+  const params = {
+    searchText: searchText.value,
+    currentPage: currentPage.value
+  }
+  emit('update', params)
 }
 
 function changePage(newPage) {
