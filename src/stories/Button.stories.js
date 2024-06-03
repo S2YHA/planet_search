@@ -1,4 +1,4 @@
-import Button from '../components/atoms/Button.vue'
+import Button from '../components/atoms/ButtonAtom.vue'
 
 export default {
   title: 'Atoms/Button',

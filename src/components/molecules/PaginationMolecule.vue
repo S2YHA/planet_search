@@ -3,7 +3,7 @@
     <Button label="Prev" :disabled="currentPage === 1" @click="changePage(currentPage - 1)" />
     <Button
       v-for="pageNumber in totalPages"
-      :class="currentPage == pageNumber ? 'opacity-50' : ''"
+      :class="[currentPage == pageNumber ? 'opacity-50' : '', 'hidden sm:block']"
       :label="pageNumber.toString()"
       @click="changePage(pageNumber)"
     />
@@ -16,9 +16,8 @@
 </template>
 
 <script setup>
-import Button from '../atoms/Button.vue'
-
-const emit = defineEmits(['changePage'])
+import { useScroll } from '@/composables/useScroll'
+import Button from '@/components/atoms/ButtonAtom.vue'
 
 defineProps({
   currentPage: {
@@ -31,7 +30,11 @@ defineProps({
   }
 })
 
+const emit = defineEmits(['changePage'])
+const { scrollToTop } = useScroll()
+
 function changePage(newPage) {
   emit('changePage', newPage)
+  scrollToTop()
 }
 </script>

@@ -15,7 +15,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import DataTable from './components/organisms/DataTable.vue'
+import DataTable from './components/organisms/TableOrganism.vue'
 
 const planetsData = ref([])
 const pages = ref(1)
@@ -24,17 +24,17 @@ const headers = ['Name', 'Population', 'Rotation Period', 'Climate', 'Gravity', 
 function getPlanets({ searchText = '', currentPage = 1 } = {}) {
   const query = buildQuery(searchText.value, currentPage.value)
   fetch('https://swapi.dev/api/planets' + query)
-    .then(function (response) {
+    .then((response) => {
       if (response.status !== 200) {
         console.log('Looks like there was a problem. Status Code: ' + response.status)
         return
       }
-      response.json().then(function (data) {
+      response.json().then((data) => {
         pages.value = countPages(data)
         planetsData.value = prepareData(data.results)
       })
     })
-    .catch(function (err) {
+    .catch((err) => {
       console.log('Fetch Error', err)
     })
 }
