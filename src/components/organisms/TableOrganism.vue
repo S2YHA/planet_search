@@ -1,11 +1,11 @@
 <template>
-  <div class="w-full bg-grey bg-opacity-20">
+  <div class="w-full">
     <div class="w-full flex justify-center pb-3 px-3">
       <Input class="w-full max-w-96" v-model="searchText" />
     </div>
-    <div class="mx-3">
+    <div class="mx-3 lg:mx-auto lg:max-w-screen-xl">
       <table class="w-full">
-        <thead class="hidden sm:table-header-group">
+        <thead class="hidden lg:table-header-group">
           <tr>
             <th class="py-3 px-6 font-extrabold" v-for="header in headers">{{ header }}</th>
           </tr>
@@ -17,7 +17,7 @@
             :key="JSON.parse(JSON.stringify(row))"
           >
             <td
-              class="py-3 px-6 text-center flex justify-between before:font-bold before:content-[attr(data-label)] before:text-left sm:before:text-center sm:table-cell sm:before:content-none"
+              class="py-3 px-6 text-center flex justify-between before:font-bold before:content-[attr(data-label)] before:text-left lg:before:text-center lg:table-cell lg:before:content-none"
               :data-label="key"
               v-for="(value, key) in row"
             >
@@ -59,24 +59,22 @@ defineProps({
 })
 
 const currentPage = ref(1)
-function changePage(newPage) {
-  currentPage.value = newPage
+const searchText = ref('')
+
+function emitUpdate() {
+  emit('update', {
+    searchText: searchText,
+    currentPage: currentPage
+  })
 }
 
-const searchText = ref('')
+function changePage(newPage) {
+  currentPage.value = newPage
+  emitUpdate()
+}
 
 watch(searchText, () => {
   currentPage.value = 1
-
-  emit('update', {
-    searchText: searchText,
-    currentPage: currentPage
-  })
-})
-watch(currentPage, () => {
-  emit('update', {
-    searchText: searchText,
-    currentPage: currentPage
-  })
+  emitUpdate()
 })
 </script>

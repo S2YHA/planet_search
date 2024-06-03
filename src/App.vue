@@ -1,6 +1,6 @@
 <template>
   <DataTable
-    v-if="planetsData.length"
+    v-if="!isLoading && planetsData.length"
     class="justify-center"
     :headers="headers"
     :data="planetsData"
@@ -11,18 +11,21 @@
       <a :href="value" target="_blank">link</a>
     </template>
   </DataTable>
+  <div v-else>LOADING</div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import DataTable from './components/organisms/TableOrganism.vue'
 
-const planetsData = ref([])
 const pages = ref(1)
+const planetsData = ref([])
+const isLoading = ref(false)
 const headers = ['Name', 'Population', 'Rotation Period', 'Climate', 'Gravity', 'Created', 'Url']
 
 function getPlanets({ searchText = '', currentPage = 1 } = {}) {
   const query = buildQuery(searchText.value, currentPage.value)
+  isLoading.value = true
   fetch('https://swapi.dev/api/planets' + query)
     .then((response) => {
       if (response.status !== 200) {
@@ -37,6 +40,9 @@ function getPlanets({ searchText = '', currentPage = 1 } = {}) {
     .catch((err) => {
       console.log('Fetch Error', err)
     })
+    .finally(() => {
+      isLoading.value = false
+    })
 }
 
 function buildQuery(searchText, currentPage) {
@@ -50,22 +56,34 @@ onMounted(() => {
   getPlanets()
 })
 
-const rowsPerPage = 10
 function countPages(data) {
+  const rowsPerPage = 10
   return Math.ceil(data.count / rowsPerPage)
 }
 
 function prepareData(data) {
-  return data.map((planet) => {
+  const mappedData = data.map((planet) => {
     return {
       Name: planet.name,
-      Population: planet.population === 'unknown' ? '-' : planet.population,
-      'Rotation Period': planet.rotation_period === 'unknown' ? '-' : planet.rotation_period,
-      Climate: planet.climate === 'unknown' ? '-' : planet.climate,
-      Gravity: planet.gravity === 'unknown' ? '-' : planet.gravity,
+      Population: planet.population,
+      'Rotation Period': planet.rotation_period,
+      Climate: planet.climate,
+      Gravity: planet.gravity,
       Created: prepareDate(planet.created),
       Url: planet.url
     }
+  })
+  return replaceUnknown(mappedData)
+}
+
+function replaceUnknown(data) {
+  return data.map((planet) => {
+    Object.keys(planet).forEach((key) => {
+      if (planet[key] === 'unknown') {
+        planet[key] = 'N/A'
+      }
+    })
+    return planet
   })
 }
 
