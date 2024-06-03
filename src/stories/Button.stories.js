@@ -5,7 +5,7 @@ export default {
   component: Button
 }
 
-export const Primary = {
+export const Basic = {
   args: {
     label: 'Button'
   }
