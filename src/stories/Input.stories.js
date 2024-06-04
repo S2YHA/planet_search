@@ -6,7 +6,5 @@ export default {
 }
 
 export const Basic = {
-  args: {
-    label: 'Input'
-  }
+  args: {}
 }
