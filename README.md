@@ -1,40 +1,42 @@
 # planet_search
 
-This template should help get you started developing with Vue 3 in Vite.
+Rozwiązanie zadania zawiera dodatkowo:
+1. Testy jednostkowe
+2. Storybook
+3. Atomic design
 
-## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Zalecane środowisko IDE
 
-## Customize configuration
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (i wyłącz Vetur).
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## Dostosowanie konfiguracji
 
-## Project Setup
+Zobacz [Vite Configuration Reference](https://vitejs.dev/config/).
+
+## Konfiguracja projektu
 
 ```sh
 npm install
-```
-
 ### Compile and Hot-Reload for Development
 
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+### Kompilacja i minimalizacja do produkcji
 
 ```sh
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### Uruchamianie testów jednostkowych za pomocą Vitest
 
 ```sh
 npm run test:unit
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+### Lintowanie za pomocą ESLint
 
 ```sh
 npm run lint
